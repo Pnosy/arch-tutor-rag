@@ -1,0 +1,16 @@
+{
+ "chunk_count": 277,
+ "token_min": 344,
+ "token_max": 1199,
+ "token_avg": 1082.5,
+ "in_target_range": 270,
+ "in_target_range_pct": 97.5,
+ "total_chars": 407233,
+ "chapters_covered": 12,
+ "params": {
+  "TARGET_TOKENS": 1000,
+  "MIN_TOKENS": 800,
+  "MAX_TOKENS": 1200,
+  "OVERLAP_CHARS": 180
+ }
+}

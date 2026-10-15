@@ -1,0 +1,41 @@
+MIT License
+
+Copyright (c) 2026 Arch-Tutor Project (课程作业项目)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+重要声明：教材版权
+================================================================================
+
+本许可证仅覆盖本仓库中的**源代码与文档**。
+
+教材《计算机体系结构基础》（胡伟武 等）的著作权归原作者及出版方所有。
+本仓库**不包含**该教材的 PDF、正文文本或任何实质性内容摘录：
+
+  - 不上传教材 PDF
+  - 不上传逐页提取的原文（pages.jsonl）
+  - 不上传分块原文（chunks.jsonl）
+  - 不上传含教材全文的知识库（arch_kb.sqlite）
+
+仓库中的 data/kb_meta.json 仅包含**结构元数据**（章节名、页码区间、
+块数、token 统计等），不含教材正文。
+
+使用者需自行合法获取教材电子版，并在本地运行 scripts/01~03 重建知识库。
+本项目的设计目标之一即「连续引用不超过 3 句」，以尊重教材版权。

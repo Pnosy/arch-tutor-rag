@@ -1,0 +1,68 @@
+# ============================================================
+#  Arch-Tutor .gitignore
+# ============================================================
+
+# ---------- 版权保护：教材原文与包含原文的产物不上传 ----------
+# 教材 PDF 受版权保护，请勿提交（使用者自行准备）
+*.pdf
+!docs/*.pdf
+
+# 逐页原文（pages.jsonl 含教材全部正文）
+data/pages.jsonl
+
+# 分块原文（chunks.jsonl 含教材大段原文）
+data/chunks.jsonl
+
+# 由原文派生的知识库（内含教材全文）
+data/arch_kb.sqlite
+data/arch_kb.sqlite-wal
+data/arch_kb.sqlite-shm
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+venv/
+.venv/
+env/
+ENV/
+
+# ---------- 密钥与本地配置（严禁提交）----------
+.env
+.env.*
+*.key
+*.pem
+secrets.*
+credentials.*
+.credentials.yaml
+# 任何包含 API Key 的本地文件
+*api_key*
+*token*.txt
+
+# ---------- 编辑器 / 系统 ----------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- 临时产物 ----------
+_preview/
+*.tmp
+*.log
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ---------- 个人路径残留检查 ----------
+# 若有本地绝对路径写进了配置，请在此忽略对应文件
+*.local.json

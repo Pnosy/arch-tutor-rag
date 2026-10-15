@@ -1,0 +1,140 @@
+{
+ "chunk_stats": {
+  "chunk_count": 277,
+  "token_min": 344,
+  "token_max": 1199,
+  "token_avg": 1082.5,
+  "in_800_1200": 270,
+  "in_800_1200_pct": 97.5,
+  "below_800_chapter_tail": 7,
+  "above_1200": 0,
+  "total_chars": 407233
+ },
+ "chapter_coverage": {
+  "total_chapters": 12,
+  "covered": 12,
+  "coverage_pct": 100.0,
+  "page_range": [
+   37,
+   429
+  ],
+  "bad_metadata_chunks": 0
+ },
+ "retrieval_test": {
+  "cases": 10,
+  "top1_accuracy": 80.0,
+  "top3_recall": 90.0,
+  "details": [
+   {
+    "query": "Cache 的直接相联、全相联和组相联有什么区别",
+    "expect": "指令流水线",
+    "got": [
+     "指令流水线",
+     "指令流水线",
+     "指令流水线"
+    ],
+    "top1": true,
+    "top3": true
+   },
+   {
+    "query": "指令流水线中数据相关会带来什么冲突",
+    "expect": "指令流水线",
+    "got": [
+     "指令流水线",
+     "指令流水线",
+     "指令流水线"
+    ],
+    "top1": true,
+    "top3": true
+   },
+   {
+    "query": "TLB 地址翻译的过程是怎样的",
+    "expect": "特权指令系统",
+    "got": [
+     "特权指令系统",
+     "特权指令系统",
+     "特权指令系统"
+    ],
+    "top1": true,
+    "top3": true
+   },
+   {
+    "query": "异常和中断分别指什么",
+    "expect": "特权指令系统",
+    "got": [
+     "软硬件协同",
+     "软硬件协同",
+     "指令系统"
+    ],
+    "top1": false,
+    "top3": false
+   },
+   {
+    "query": "多核处理器之间如何保证存储一致性",
+    "expect": "多核处理结构",
+    "got": [
+     "多核处理结构",
+     "多核处理结构",
+     "多核处理结构"
+    ],
+    "top1": true,
+    "top3": true
+   },
+   {
+    "query": "CPI 和 CPU 时间怎么计算",
+    "expect": "计算机系统性能评价与性能分析",
+    "got": [
+     "计算机系统性能评价与性能分析",
+     "计算机系统性能评价与性能分析",
+     "计算机系统性能评价与性能分析"
+    ],
+    "top1": true,
+    "top3": true
+   },
+   {
+    "query": "指令系统设计有哪些基本原则",
+    "expect": "指令系统",
+    "got": [
+     "指令系统",
+     "指令系统",
+     "指令系统"
+    ],
+    "top1": true,
+    "top3": true
+   },
+   {
+    "query": "计算机启动时处理器核如何初始化",
+    "expect": "计算机启动过程分析",
+    "got": [
+     "计算机启动过程分析",
+     "计算机启动过程分析",
+     "计算机启动过程分析"
+    ],
+    "top1": true,
+    "top3": true
+   },
+   {
+    "query": "程序局部性原理是什么",
+    "expect": "引言",
+    "got": [
+     "计算机组成原理和结构",
+     "计算机组成原理和结构",
+     "引言"
+    ],
+    "top1": false,
+    "top3": true
+   },
+   {
+    "query": "运算器的加法器如何设计",
+    "expect": "运算器设计",
+    "got": [
+     "运算器设计",
+     "运算器设计",
+     "运算器设计"
+    ],
+    "top1": true,
+    "top3": true
+   }
+  ]
+ }
+}

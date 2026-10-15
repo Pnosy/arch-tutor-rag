@@ -1,0 +1,398 @@
+[
+ {
+  "chapter_id": 1,
+  "title": "引言",
+  "part": "第一部分 引言",
+  "page_start": 37,
+  "page_end": 64,
+  "sections": [
+   {
+    "title": "计算机体系结构的研究内容",
+    "page": 37
+   },
+   {
+    "title": "衡量计算机的指标",
+    "page": 43
+   },
+   {
+    "title": "计算机体系结构的发展",
+    "page": 48
+   },
+   {
+    "title": "体系结构设计的基本原则",
+    "page": 56
+   },
+   {
+    "title": "本章小结",
+    "page": 60
+   },
+   {
+    "title": "习题",
+    "page": 60
+   }
+  ]
+ },
+ {
+  "chapter_id": 2,
+  "title": "指令系统",
+  "part": "第二部分 指令系统结构",
+  "page_start": 65,
+  "page_end": 94,
+  "sections": [
+   {
+    "title": "指令系统简介",
+    "page": 65
+   },
+   {
+    "title": "指令系统设计原则",
+    "page": 66
+   },
+   {
+    "title": "指令系统发展历程",
+    "page": 67
+   },
+   {
+    "title": "指令系统组成",
+    "page": 72
+   },
+   {
+    "title": "RISC指令集比较",
+    "page": 79
+   },
+   {
+    "title": "C语言的机器表示",
+    "page": 86
+   },
+   {
+    "title": "本章小结",
+    "page": 93
+   },
+   {
+    "title": "习题",
+    "page": 93
+   }
+  ]
+ },
+ {
+  "chapter_id": 3,
+  "title": "特权指令系统",
+  "part": "第二部分 指令系统结构",
+  "page_start": 95,
+  "page_end": 116,
+  "sections": [
+   {
+    "title": "特权指令系统简介",
+    "page": 95
+   },
+   {
+    "title": "异常与中断",
+    "page": 99
+   },
+   {
+    "title": "存储管理",
+    "page": 105
+   },
+   {
+    "title": "本章小结",
+    "page": 115
+   },
+   {
+    "title": "习题",
+    "page": 115
+   }
+  ]
+ },
+ {
+  "chapter_id": 4,
+  "title": "软硬件协同",
+  "part": "第二部分 指令系统结构",
+  "page_start": 117,
+  "page_end": 142,
+  "sections": [
+   {
+    "title": "应用程序二进制接口",
+    "page": 117
+   },
+   {
+    "title": "六种常见的上下文切换场景",
+    "page": 129
+   },
+   {
+    "title": "同步机制",
+    "page": 136
+   },
+   {
+    "title": "本章小结",
+    "page": 139
+   },
+   {
+    "title": "习题",
+    "page": 139
+   }
+  ]
+ },
+ {
+  "chapter_id": 5,
+  "title": "计算机组成原理和结构",
+  "part": "第三部分 计算机硬件结构",
+  "page_start": 143,
+  "page_end": 166,
+  "sections": [
+   {
+    "title": "冯·诺依曼结构",
+    "page": 143
+   },
+   {
+    "title": "计算机的组成部件",
+    "page": 144
+   },
+   {
+    "title": "计算机系统硬件结构发展",
+    "page": 155
+   },
+   {
+    "title": "处理器和IO设备间的通信",
+    "page": 160
+   },
+   {
+    "title": "本章小结",
+    "page": 165
+   },
+   {
+    "title": "习题",
+    "page": 165
+   }
+  ]
+ },
+ {
+  "chapter_id": 6,
+  "title": "计算机总线接口技术",
+  "part": "第三部分 计算机硬件结构",
+  "page_start": 167,
+  "page_end": 190,
+  "sections": [
+   {
+    "title": "总线概述",
+    "page": 168
+   },
+   {
+    "title": "总线分类",
+    "page": 168
+   },
+   {
+    "title": "片上总线",
+    "page": 169
+   },
+   {
+    "title": "内存总线",
+    "page": 175
+   },
+   {
+    "title": "系统总线",
+    "page": 181
+   },
+   {
+    "title": "本章小结",
+    "page": 190
+   },
+   {
+    "title": "习题",
+    "page": 190
+   }
+  ]
+ },
+ {
+  "chapter_id": 7,
+  "title": "计算机启动过程分析",
+  "part": "第三部分 计算机硬件结构",
+  "page_start": 191,
+  "page_end": 216,
+  "sections": [
+   {
+    "title": "处理器核初始化",
+    "page": 191
+   },
+   {
+    "title": "总线接口初始化",
+    "page": 202
+   },
+   {
+    "title": "设备的探测及驱动加载",
+    "page": 205
+   },
+   {
+    "title": "多核启动过程",
+    "page": 210
+   },
+   {
+    "title": "本章小结",
+    "page": 213
+   },
+   {
+    "title": "习题",
+    "page": 213
+   }
+  ]
+ },
+ {
+  "chapter_id": 8,
+  "title": "运算器设计",
+  "part": "第四部分 CPU的微结构",
+  "page_start": 217,
+  "page_end": 256,
+  "sections": [
+   {
+    "title": "二进制与逻辑电路",
+    "page": 217
+   },
+   {
+    "title": "简单运算器设计",
+    "page": 234
+   },
+   {
+    "title": "定点补码乘法器",
+    "page": 242
+   },
+   {
+    "title": "本章小结",
+    "page": 254
+   },
+   {
+    "title": "习题",
+    "page": 254
+   }
+  ]
+ },
+ {
+  "chapter_id": 9,
+  "title": "指令流水线",
+  "part": "第四部分 CPU的微结构",
+  "page_start": 257,
+  "page_end": 288,
+  "sections": [
+   {
+    "title": "单周期处理器",
+    "page": 257
+   },
+   {
+    "title": "流水线处理器",
+    "page": 259
+   },
+   {
+    "title": "指令相关和流水线冲突",
+    "page": 262
+   },
+   {
+    "title": "流水线与异常处理",
+    "page": 269
+   },
+   {
+    "title": "提高流水线效率的技术",
+    "page": 270
+   },
+   {
+    "title": "本章小结",
+    "page": 280
+   },
+   {
+    "title": "习题",
+    "page": 282
+   }
+  ]
+ },
+ {
+  "chapter_id": 10,
+  "title": "并行编程基础",
+  "part": "第五部分 并行处理结构",
+  "page_start": 289,
+  "page_end": 316,
+  "sections": [
+   {
+    "title": "程序的并行行为",
+    "page": 289
+   },
+   {
+    "title": "并行编程模型",
+    "page": 291
+   },
+   {
+    "title": "典型并行编程环境",
+    "page": 294
+   },
+   {
+    "title": "习题",
+    "page": 314
+   }
+  ]
+ },
+ {
+  "chapter_id": 11,
+  "title": "多核处理结构",
+  "part": "第五部分 并行处理结构",
+  "page_start": 317,
+  "page_end": 350,
+  "sections": [
+   {
+    "title": "多核处理器的发展演化",
+    "page": 317
+   },
+   {
+    "title": "多核处理器的访存结构",
+    "page": 320
+   },
+   {
+    "title": "多核处理器的互连结构",
+    "page": 327
+   },
+   {
+    "title": "多核处理器的同步机制",
+    "page": 332
+   },
+   {
+    "title": "典型多核处理器",
+    "page": 337
+   },
+   {
+    "title": "本章小结",
+    "page": 346
+   },
+   {
+    "title": "习题",
+    "page": 347
+   }
+  ]
+ },
+ {
+  "chapter_id": 12,
+  "title": "计算机系统性能评价与性能分析",
+  "part": "第六部分 系统性能评价与分析",
+  "page_start": 351,
+  "page_end": 430,
+  "sections": [
+   {
+    "title": "计算机系统性能评价指标",
+    "page": 351
+   },
+   {
+    "title": "测试程序集",
+    "page": 357
+   },
+   {
+    "title": "性能分析方法",
+    "page": 381
+   },
+   {
+    "title": "性能测试和分析实例",
+    "page": 395
+   },
+   {
+    "title": "本章小结",
+    "page": 415
+   },
+   {
+    "title": "习题",
+    "page": 416
+   }
+  ]
+ }
+]
