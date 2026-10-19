@@ -103,17 +103,24 @@ python agents/arch_tutor_agent.py "讲解指令流水线的数据相关" --api
 ## 三、一键演示
 
 ```powershell
+check.bat                       # 课前自检（双击即可）
 python demo.py                  # 完整演示（6 幕）
-python demo.py --fast           # 精简版
-python demo.py --scene 4        # 只演示第 4 幕（诚实性验证）
+python demo.py --slow           # ★课堂投屏：逐行浮现，约 26 秒
+python demo.py --scene 4 --slow # 只演示第 4 幕（诚实性验证）
+python demo.py --fast           # 精简版（0.1 秒，自测用）
 python demo.py --no-pause       # 录屏模式，不停顿
 ```
+
+> **为什么需要 `--slow`**：系统所有操作都在 0.1 秒内完成，144 行输出会
+> 一瞬间刷完，投屏时学生根本看不清。`--slow` 让每行延迟 0.18 秒浮现，
+> 可加数值调整，如 `--slow 0.3`。
 
 演示分 6 幕：知识库概览 → 检索演示 → 页码引用 → **诚实性验证** →
 R1~R6 合规性总览 → 总结。
 
-配套讲解稿见 [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)，含每幕的
-操作、预期输出、讲解词与可能的追问。
+配套文档：
+- [docs/CLASSROOM_DEMO.md](docs/CLASSROOM_DEMO.md) —— **课堂演示教程**（课前检查、10 分钟流程、应急预案）
+- [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) —— 逐幕讲解词与可能的追问
 
 ---
 
@@ -121,6 +128,7 @@ R1~R6 合规性总览 → 总结。
 
 ```
 arch-rag-kb/
+├── check.bat                   ★ 课前自检（双击运行）
 ├── demo.py                     ★ 一键演示脚本
 ├── data/                       # 知识库与中间产物
 │   ├── kb_meta.json            # 结构元数据（不含正文，可公开）
@@ -155,6 +163,7 @@ arch-rag-kb/
 ├── docs/
 │   ├── DESIGN.md               # 设计与实施文档
 │   ├── DEMO_SCRIPT.md          ★ 课堂演示讲解稿
+│   ├── CLASSROOM_DEMO.md       ★ 课堂演示教程（检查清单/节奏/应急预案）
 │   ├── USAGE.md                ★ 使用指南（下载后如何跑起来）
 │   └── GITHUB_GUIDE.md         ★ GitHub 上传指南
 └── deliverables/               ★ 正式交付物

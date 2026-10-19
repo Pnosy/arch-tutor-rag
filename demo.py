@@ -54,22 +54,33 @@ CITE_RE = re.compile(r"【教材\s*p\.\s*\d+(?:\s*[-–]\s*\d+)?】")
 # ---------------------------------------------------------------- 输出工具
 W = 78
 
+# 慢速模式：投屏授课时逐行浮现，避免一瞬间刷完学生看不清。
+# 由 --slow 参数设置（秒/行），0 表示不延迟。
+_LINE_DELAY = 0.0
+
+
+def _out(text: str = "", end: str = "\n"):
+    """统一的输出入口，受 --slow 控制逐行延迟。"""
+    print(text, end=end, flush=True)
+    if _LINE_DELAY > 0:
+        time.sleep(_LINE_DELAY)
+
 
 def hr(ch="─"):
-    print(ch * W)
+    _out(ch * W)
 
 
 def banner(scene: str, title: str, note: str = ""):
-    print()
+    _out()
     hr("═")
-    print(f"  第 {scene} 幕 · {title}")
+    _out(f"  第 {scene} 幕 · {title}")
     if note:
-        print(f"  {note}")
+        _out(f"  {note}")
     hr("═")
 
 
 def say(text: str, indent: int = 2):
-    print(" " * indent + text)
+    _out(" " * indent + text)
 
 
 def pause(seconds: float, enabled: bool):
@@ -78,14 +89,14 @@ def pause(seconds: float, enabled: bool):
 
 
 def ok(text: str):
-    print(f"  [OK] {text}")
+    _out(f"  [OK] {text}")
 
 
 # ---------------------------------------------------------------- 演示内容
 def scene1_show_kb() -> bool:
     banner("1", "知识库概览", "Phase 1 产出的教材知识库")
     if not DB.exists():
-        print()
+        _out()
         say("!! 未找到知识库 data/arch_kb.sqlite")
         say("   请先运行：")
         say("     python scripts/01_extract_pages.py \"你的教材.pdf\"")
@@ -99,14 +110,14 @@ def scene1_show_kb() -> bool:
     say(f"分块数    : {info.get('chunk_count')} 块")
     say(f"章节数    : {info.get('chapter_count')} 章")
     say(f"分词器    : {info.get('tokenizer')}   排序: {info.get('ranking')}")
-    print()
+    _out()
     say("各章块数与页码覆盖：")
-    print(f"    {'章':<4}{'章节名':<24}{'块数':>5}   {'页码范围':<12}")
+    _out(f"    {'章':<4}{'章节名':<24}{'块数':>5}   {'页码范围':<12}")
     hr("·")
     for c in info["chapters"]:
-        print(f"    {c['chapter_id']:<4}{c['chapter'][:22]:<24}{c['chunks']:>5}   "
+        _out(f"    {c['chapter_id']:<4}{c['chapter'][:22]:<24}{c['chunks']:>5}   "
               f"p.{c['p_start']}-{c['p_end']}")
-    print()
+    _out()
     ok("知识库就绪：12 章全覆盖，页码元数据完整")
     return True
 
@@ -120,7 +131,7 @@ def scene2_retrieval(show_detail: bool = True) -> None:
         ("TLB 地址翻译的过程", "教材第 3 章"),
     ]
     for q, expect in queries:
-        print()
+        _out()
         say(f"提问：{q}")
         say(f"（预期来源：{expect}）")
         t0 = time.time()
@@ -130,11 +141,11 @@ def scene2_retrieval(show_detail: bool = True) -> None:
             say("  -> 无命中")
             continue
         for i, h in enumerate(hits, 1):
-            print(f"    [{i}] {h['citation']}  {h['chapter']}"
+            _out(f"    [{i}] {h['citation']}  {h['chapter']}"
                   + (f" / {h['section']}" if h.get("section") else ""))
             if show_detail:
                 snippet = h["text"][:88].replace("\n", " ")
-                print(f"         {snippet}…")
+                _out(f"         {snippet}…")
         ok(f"命中 {len(hits)} 条，耗时 {dt:.0f} ms")
 
 
@@ -143,23 +154,23 @@ def scene3_citations() -> None:
            "回答中的每处引用都来自检索片段的真实页码")
     q = "直接相联、全相联和组相联有什么区别？"
     hits = KS.search(q, topk=3)
-    print()
+    _out()
     say(f"提问：{q}")
-    print()
+    _out()
     # 真实性核对
     real_pages = set()
     for h in hits:
         for p in range(h["page_start"], h["page_end"] + 1):
             real_pages.add(p)
-    print(f"    检索片段覆盖页码：{sorted(real_pages)}")
-    print()
+    _out(f"    检索片段覆盖页码：{sorted(real_pages)}")
+    _out()
     cites = [h["citation"] for h in hits]
     say("生成的引用：")
     for c in cites:
         nums = [int(n) for n in re.findall(r"\d+", c)]
         valid = any(n in real_pages for n in nums)
-        print(f"    {c}   -> 页码{'真实存在 [OK]' if valid else '不存在 [FAIL]'}")
-    print()
+        _out(f"    {c}   -> 页码{'真实存在 [OK]' if valid else '不存在 [FAIL]'}")
+    _out()
     ok("所有引用页码均可回溯到教材原文，未出现编造页码")
 
 
@@ -171,7 +182,7 @@ def scene4_gate() -> None:
         ("请帮我写一份 Java 的冒泡排序代码。", "超出教材范围"),
     ]
     for q, why in cases:
-        print()
+        _out()
         say(f"提问：{q}")
         say(f"（{why}）")
         raw = KS.search(q, topk=5)
@@ -180,15 +191,15 @@ def scene4_gate() -> None:
         say(f"  相关性闸门  ：{'通过' if passed else '拦截'}")
         hits = raw if passed else []
         res = AGENT.answer_offline(q, hits)
-        print()
+        _out()
         for line in res["answer"].split("\n")[:3]:
             if line.strip():
-                print(f"    {line}")
-        print()
+                _out(f"    {line}")
+        _out()
         if "教材未找到相关内容" in res["answer"]:
             ok("如实回答「教材未找到相关内容」，未编造 [符合 R5]")
         else:
-            print("    [FAIL] 未如实说明")
+            _out("    [FAIL] 未如实说明")
 
 
 def scene5_compliance() -> None:
@@ -207,16 +218,16 @@ def scene5_compliance() -> None:
         "R3": "附【教材 p.XX】引用", "R4": "中文+保留英文术语",
         "R5": "未覆盖要诚实说明", "R6": "不复制大段原文",
     }
-    print()
-    print(f"    {'约束':<5}{'要求':<22}{'通过':<10}结果")
+    _out()
+    _out(f"    {'约束':<5}{'要求':<22}{'通过':<10}结果")
     hr("·")
     for rid, v in per.items():
         tot = v["pass"] + v["fail"]
         mark = "PASS" if v["fail"] == 0 else "FAIL"
-        print(f"    {rid:<5}{desc[rid]:<22}{v['pass']}/{tot:<8}{mark}")
+        _out(f"    {rid:<5}{desc[rid]:<22}{v['pass']}/{tot:<8}{mark}")
     total_pass = sum(v["pass"] for v in per.values())
     total_all = sum(v["pass"] + v["fail"] for v in per.values())
-    print()
+    _out()
     ok(f"总计 {total_pass}/{total_all} 项通过"
        f"（{total_pass/total_all*100:.0f}%）")
 
@@ -224,7 +235,7 @@ def scene5_compliance() -> None:
 def scene6_closing() -> None:
     banner("6", "总结", "约束行为、开放实现")
     say("本系统的核心不是「能回答」，而是「守规矩」：")
-    print()
+    _out()
     for line in [
         "R1  检索是回答的必经步骤（提示词 + 代码双重强制）",
         "R2  相关性闸门拦截无关内容，杜绝拿无关片段当依据",
@@ -234,7 +245,7 @@ def scene6_closing() -> None:
         "R6  连续引用不超过 3 句，只做短引用与转述",
     ]:
         say("  • " + line)
-    print()
+    _out()
     hr("═")
     say("演示结束。可自行尝试：")
     say(f'  python agents/arch_tutor_agent.py "你的问题" --offline')
@@ -253,39 +264,55 @@ SCENES = {
 
 
 def main() -> int:
+    global _LINE_DELAY
+
     ap = argparse.ArgumentParser(description="Arch-Tutor 一键演示")
     ap.add_argument("--scene", type=int, default=0, help="只演示指定幕（1~6）")
     ap.add_argument("--fast", action="store_true", help="精简模式，跳过停顿")
     ap.add_argument("--no-pause", action="store_true", help="不停顿（录屏用）")
+    ap.add_argument(
+        "--slow",
+        type=float,
+        nargs="?",
+        const=0.18,
+        default=0.0,
+        metavar="秒",
+        help="逐行慢速输出，默认每行 0.18 秒（投屏授课用）",
+    )
     args = ap.parse_args()
 
-    do_pause = not (args.fast or args.no_pause)
+    # 慢速模式：让投屏时每行依次出现，学生跟得上
+    _LINE_DELAY = max(0.0, args.slow)
 
-    print()
+    do_pause = not (args.fast or args.no_pause)
+    # 慢速模式下场景间的停顿可以缩短，因为逐行延迟已提供节奏
+    gap = 1.0 if _LINE_DELAY > 0 else 1.5
+
+    _out()
     hr("═")
-    print("  Arch-Tutor · 计算机体系结构课程知识库智能问答系统")
-    print("  一键演示  |  教材：《计算机体系结构基础》430 页 / 12 章")
+    _out("  Arch-Tutor · 计算机体系结构课程知识库智能问答系统")
+    _out("  一键演示  |  教材：《计算机体系结构基础》430 页 / 12 章")
     hr("═")
 
     if args.scene:
         name, fn = SCENES.get(args.scene, (None, None))
         if fn is None:
-            print(f"无效的幕号：{args.scene}（可选 1~6）")
+            _out(f"无效的幕号：{args.scene}（可选 1~6）")
             return 1
         fn()
         return 0
 
     if not scene1_show_kb():
         return 1
-    pause(1.5, do_pause)
+    pause(gap, do_pause)
     scene2_retrieval(show_detail=not args.fast)
-    pause(1.5, do_pause)
+    pause(gap, do_pause)
     scene3_citations()
-    pause(1.5, do_pause)
+    pause(gap, do_pause)
     scene4_gate()
-    pause(1.5, do_pause)
+    pause(gap, do_pause)
     scene5_compliance()
-    pause(1.0, do_pause)
+    pause(gap, do_pause)
     scene6_closing()
     return 0
 
