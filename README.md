@@ -22,33 +22,76 @@
 
 ## 二、快速开始
 
+> **⚠️ 第一次使用请先读这一段**
+>
+> 由于教材受版权保护，本仓库**不包含**教材 PDF 和正文数据
+> （`pages.jsonl` / `chunks.jsonl` / `arch_kb.sqlite` 均未上传）。
+> 这意味着：**刚 clone 下来时系统还不能直接问答**，需要你先准备教材 PDF
+> 并运行一次建库脚本（约 1 分钟）。
+>
+> 仓库里已包含 `data/kb_meta.json`（仅结构元数据：章节名、页码区间、统计数字），
+> 可用来看数据，但不含任何教材正文。
+
+### 第 1 步：克隆并安装依赖
+
 ```powershell
-git clone https://github.com/你的用户名/arch-tutor-rag.git
+git clone https://github.com/Pnosy/arch-tutor-rag.git
 cd arch-tutor-rag
-python -m pip install pymupdf    # 仅建库阶段需要
+python -m pip install pymupdf
+```
 
-# ---- 建库（仓库不含教材原文，需自备 PDF）----
-python scripts/01_extract_pages.py "你的教材.pdf"   # 提取 430 页 + 检测 12 章
-python scripts/02_chunk.py                          # 分块 -> 277 块
-python scripts/03_build_kb.py                       # 建 FTS5 知识库
-python scripts/04_verify_kb.py                      # 验证知识库
+> `pymupdf` **只有建库这一步需要**。之后的检索、问答、演示、测试
+> 都只用 Python 标准库，不需要任何第三方包。
 
-# ---- 一键演示（推荐）----
+### 第 2 步：准备教材并建库
+
+自行合法获取《计算机体系结构基础》电子版（PDF），然后：
+
+```powershell
+python scripts/01_extract_pages.py "你的教材路径.pdf"   # 提取 + 检测 12 章
+python scripts/02_chunk.py                              # 分块 -> 277 块
+python scripts/03_build_kb.py                           # 建 FTS5 知识库
+python scripts/04_verify_kb.py                           # 验证（可选）
+```
+
+**PDF 路径有三种写法，任选其一：**
+
+```powershell
+# ① 直接作为参数（推荐）
+python scripts/01_extract_pages.py "D:\教材\计算机体系结构基础.pdf"
+
+# ② 用环境变量
+$env:ARCH_TUTOR_PDF = "D:\教材\计算机体系结构基础.pdf"
+python scripts/01_extract_pages.py
+
+# ③ 放到项目根目录并改名为「计算机体系结构基础.pdf」，然后直接运行
+python scripts/01_extract_pages.py
+```
+
+> **关于不同版本的 PDF**：脚本按 PDF 书签识别章节（level≤2 即「章」）。
+> 只要该书签结构存在，页数略有差异也能正常建库；分块数与页码区间可能
+> 略有不同，属正常现象。若你的教材是别的书，把 `data/chapters.json` 或
+> PDF 路径换掉即可复用整套流程。
+
+### 第 3 步：开始使用
+
+```powershell
+# 一键演示（6 幕，推荐第一次跑这个）
 python demo.py
 
-# ---- 问答（无需 API Key）----
+# 单次问答（无需 API Key）
 python agents/arch_tutor_agent.py "什么是直接相联和组相联？" --offline
 
-# ---- 合规性测试 ----
+# 合规性测试
 python test/run_smoke_test.py
 ```
 
-> ⚠️ **教材版权说明**：本仓库**不包含**教材 PDF 及其正文
-> （`pages.jsonl` / `chunks.jsonl` / `arch_kb.sqlite` 均已被 `.gitignore` 排除）。
-> 请自行合法获取教材电子版后运行上述建库脚本。仓库中的 `data/kb_meta.json`
-> 仅含结构元数据（章节名、页码区间、统计数字），不含任何教材正文。
+---
 
-接入 LLM API（可选）：
+### 接入 LLM API（可选）
+
+离线模式已能满足全部 R1~R6 约束，只是语言组织偏"抽取式"。
+想要更自然的表达，可接入任意 OpenAI 兼容 API：
 
 ```powershell
 $env:ARCH_TUTOR_API_KEY = "sk-你的密钥"     # 只放环境变量，切勿写进代码
@@ -112,6 +155,7 @@ arch-rag-kb/
 ├── docs/
 │   ├── DESIGN.md               # 设计与实施文档
 │   ├── DEMO_SCRIPT.md          ★ 课堂演示讲解稿
+│   ├── USAGE.md                ★ 使用指南（下载后如何跑起来）
 │   └── GITHUB_GUIDE.md         ★ GitHub 上传指南
 └── deliverables/               ★ 正式交付物
     ├── Arch-Tutor_测试报告.docx

@@ -19,7 +19,17 @@ import re
 import sys
 from pathlib import Path
 
-import pymupdf  # PyMuPDF >= 1.24
+try:
+    import pymupdf  # PyMuPDF >= 1.24
+except ImportError:
+    print(
+        "[错误] 缺少依赖库 PyMuPDF。\n\n"
+        "本脚本需要 PyMuPDF 才能读取 PDF：\n"
+        "    python -m pip install pymupdf\n\n"
+        "（只有「从 PDF 建库」这一步需要它；检索与问答阶段不需要。）",
+        file=sys.stderr,
+    )
+    raise SystemExit(1)
 
 # ---------------------------------------------------------------- 路径配置
 ROOT = Path(__file__).resolve().parents[1]
