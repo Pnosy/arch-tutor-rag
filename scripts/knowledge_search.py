@@ -176,6 +176,14 @@ def build_match_expr(query: str) -> str | None:
             frag = flat[i : i + 4]
             if len(frag) >= TRIGRAM_MIN and frag not in ordered:
                 ordered.append(frag)
+    # 4) 短词候选：连续中文长串（如「运算器里加法器」）整体匹配不上教材，
+    #    需要拆出 2~3 字的词级候选。注意 trigram 要求 >=3 字符，
+    #    因此取 3 字滑窗（含步长 1）以覆盖「运算器」「加法器」这类词边界。
+    if len(flat) >= 4:
+        for i in range(0, len(flat) - 2):
+            frag = flat[i : i + 3]
+            if len(frag) >= TRIGRAM_MIN and frag not in ordered:
+                ordered.append(frag)
 
     terms = ordered
     if not terms:
@@ -206,22 +214,75 @@ def relevance_gate(query: str, hits: list[dict], threshold: float = 0.34) -> boo
     trigram 可能因「指令」「程序」等词命中教材片段，但这些片段并不
     回答该问题。若不加判断就作答，会违反 R2/R5（用无关内容充当依据）。
 
-    判据：问题中的**实义关键词**有多少能在命中片段里找到。
-    覆盖率低于阈值即认为「未覆盖」，应如实回答「教材未找到相关内容」。
+    判据（三条，任一满足即通过）：
+      A. 覆盖率：问题的实义关键词有多少能在命中片段里找到（主判据）
+      B. 核心术语命中：问题中最长的实义术语出现在片段里
+      C. 章节标题命中：问题的实义词出现在命中片段的章节/小节标题中
+
+    B/C 的存在是为了避免「TLB 是做什么的」这类问题因疑问虚词
+    （「是做什么的」）拉低覆盖率而被误拦——教材明明讲了 TLB。
+
+    同时做一件事：过滤「只是被提及」的假通过。
+    若命中片段只在罗列/列举语境里出现该词（如教材列出「量子计算机」
+    作为未来方向但不讲解），则不算真正覆盖。
     """
     if not hits:
         return False
+
     probes = [t for t in _probe_terms(query) if len(t) >= 2]
-    # 只保留长度 >=2 且非纯粹停用词的探针
     probes = [t for t in probes if not re.fullmatch(r"[的了和与或吗呢啊]", t)]
     if not probes:
         return bool(hits)
-    blob = " ".join(h["text"] for h in hits[:3]) + " " + " ".join(
+
+    blob = " ".join(h["text"] for h in hits[:3])
+    title_blob = " ".join(
         f"{h['chapter']} {h.get('section') or ''}" for h in hits[:3]
     )
-    covered = sum(1 for t in probes if t in blob)
-    ratio = covered / len(probes)
-    return ratio >= threshold
+
+    # ---- A. 覆盖率主判据
+    # 术语可能带前缀（「程序局部性」vs 教材的「局部性」），
+    # 故除整词命中外，还接受「该术语的 >=3 字后缀在片段中出现」。
+    def _hit(t: str) -> bool:
+        if t in blob:
+            return True
+        # 后缀匹配：程序局部性 -> 局部性 / 序局部性
+        for cut in range(1, len(t) - 2):
+            suf = t[cut:]
+            if len(suf) >= TRIGRAM_MIN and suf in blob:
+                return True
+        return False
+
+    covered = [t for t in probes if _hit(t)]
+    ratio = len(covered) / len(probes)
+
+    # ---- B. 核心术语命中：取最长的实义术语
+    # 只认「领域实义词」，排除编程语言、助手性动词等非教材主题
+    NOISE = re.compile(
+        r"做|是|怎么|如何|什么|哪些|吗|呢|写|帮|代码|程序代码|一段|一个|请"
+    )
+    core_terms = sorted(
+        [t for t in probes if not NOISE.search(t) and len(t) >= 3],
+        key=len,
+        reverse=True,
+    )
+    core_hit = bool(core_terms) and core_terms[0] in blob
+
+    # ---- C. 章节标题命中：要求命中的是**实义术语**，
+    # 且该术语长度 >=3（避免「程序」这类宽泛词把「写 Python」也放过）
+    title_hit = any(
+        t in title_blob and len(t) >= 3 and not NOISE.search(t) for t in probes
+    )
+
+    # ---- 额外否决项：请求明显属于「代写代码/闲聊」等非教材范畴
+    OFFTOPIC = re.compile(
+        r"(帮我|请帮我|给我)\s*(写|编|做|生成)|写.{0,6}代码|"
+        r"(今天|天气|股票|彩票)|(?i:\bpython\b|\bjava\b|\bc\+\+\b)"
+    )
+    if OFFTOPIC.search(query):
+        return False
+
+    passed = ratio >= threshold or core_hit or title_hit
+    return passed
 
 
 def search(

@@ -72,6 +72,23 @@ TERM_MAP = {
     "Offset": "偏移",
     "Index": "索引",
     "Tag": "标签",
+    # 教材高频术语补充（便于 R4 术语对照与课堂讲解）
+    "pipeline": "流水线",
+    "instruction": "指令",
+    "processor": "处理器",
+    "memory": "存储器",
+    "register": "寄存器",
+    "interrupt": "中断",
+    "exception": "异常",
+    "virtual memory": "虚拟存储",
+    "locality": "局部性",
+    "adder": "加法器",
+    "bandwidth": "带宽",
+    "latency": "延迟",
+    "throughput": "吞吐率",
+    "coherence": "一致性",
+    "multicore": "多核",
+    "superscalar": "超标量",
 }
 
 
@@ -112,8 +129,22 @@ def answer_offline(question: str, hits: list[dict]) -> dict:
     top = hits[0]
     body_lines: list[str] = []
 
-    # R4：识别并标注关键英文术语
-    terms = detect_terms(" ".join(h["text"] for h in hits[:3]))
+    # R4：识别并标注关键英文术语。
+    # 来源有三处，按优先级：
+    #   1) 检索片段中出现的英文术语（最贴合教材原文）
+    #   2) 用户问题中提到的英文术语
+    #   3) 片段里出现的中文术语，反查英文（如「流水线」-> pipeline）
+    # 三者合并，保证即使片段恰好没有英文，也能给出术语对照，
+    # 避免 R4「关键术语保留英文原文」因检索内容而随机失效。
+    hits_blob = " ".join(h["text"] for h in hits[:3])
+    terms = detect_terms(hits_blob)
+    for extra in detect_terms(question):
+        if extra not in terms:
+            terms.append(extra)
+    # 反查：片段里出现的中文对照词
+    for en, zh in TERM_MAP.items():
+        if zh and zh in hits_blob and (en, zh) not in terms:
+            terms.append((en, zh))
     if terms:
         body_lines.append("**关键术语**（保留英文原文）：")
         for en, zh in terms[:5]:

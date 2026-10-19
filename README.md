@@ -119,7 +119,8 @@ python demo.py --no-pause       # 录屏模式，不停顿
 R1~R6 合规性总览 → 总结。
 
 配套文档：
-- [docs/CLASSROOM_DEMO.md](docs/CLASSROOM_DEMO.md) —— **课堂演示教程**（课前检查、10 分钟流程、应急预案）
+- [docs/REMOTE_DEMO.md](docs/REMOTE_DEMO.md) —— **远程课堂演示指南**（功能清单、10 分钟流程、远程注意事项）
+- [docs/CLASSROOM_DEMO.md](docs/CLASSROOM_DEMO.md) —— 课堂演示教程（课前检查、节奏把控、应急预案）
 - [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md) —— 逐幕讲解词与可能的追问
 
 ---
@@ -163,6 +164,7 @@ arch-rag-kb/
 ├── docs/
 │   ├── DESIGN.md               # 设计与实施文档
 │   ├── DEMO_SCRIPT.md          ★ 课堂演示讲解稿
+│   ├── REMOTE_DEMO.md          ★ 远程课堂演示指南
 │   ├── CLASSROOM_DEMO.md       ★ 课堂演示教程（检查清单/节奏/应急预案）
 │   ├── USAGE.md                ★ 使用指南（下载后如何跑起来）
 │   └── GITHUB_GUIDE.md         ★ GitHub 上传指南
