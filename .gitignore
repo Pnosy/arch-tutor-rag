@@ -55,6 +55,20 @@ credentials.*
 Thumbs.db
 desktop.ini
 
+# ---------- Office 临时/锁文件 ----------
+# 打开 Word/PPT/Excel 时自动生成，绝不能提交
+~$*
+*.~lock.*
+.~lock.*
+
+# ---------- 渲染预览临时目录（LibreOffice 生成）----------
+.dsh-office-*/
+preview/
+render/
+render2/
+render3/
+render4/
+
 # ---------- 临时产物 ----------
 _preview/
 *.tmp
